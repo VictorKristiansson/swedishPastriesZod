@@ -11,14 +11,14 @@ It is built with **Express**, **TypeScript**, and **Zod** for validation.
 - **DELETE /pastries/:name** – Delete a pastry by name  
 
 ## Zod Schema
-
+```ts
 const pastrySchema = z.object({
   name: z.string().min(1, "Name is required"),
   price: z.number().min(0, "Price must be 0 or more"),
   isGlutenFree: z.boolean().optional(),
   calories: z.number().min(0).optional(),
 });
-
+```
 
 ## How to run the code
 1. Copy the code
