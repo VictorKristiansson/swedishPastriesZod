@@ -17,6 +17,10 @@ type Pastry = z.infer<typeof pastrySchema>;
 
 const pastries: Pastry[] = [];
 
+app.get("/pastries", (req, res) => {
+  res.json(pastries);
+});
+
 app.post("/pastries", (req, res) => {
   const result = pastrySchema.safeParse(req.body);
   if (!result.success) {
