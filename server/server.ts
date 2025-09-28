@@ -9,6 +9,7 @@ app.use(express.json());
 
 // pastry schema
 const pastrySchema = z.object({
+  id: z.string().uuid().optional(),
   name: z.string(),
   price: z.number().min(0),
   isGlutenFree: z.boolean().optional(),
@@ -17,11 +18,14 @@ const pastrySchema = z.object({
 
 // type
 type Pastry = z.infer<typeof pastrySchema>;
-const pastries: Pastry[] = [];
+let pastries: Pastry[] = [];
 
 // get - get all pastries
 app.get("/pastries", (req, res) => {
-  res.json(pastries);
+  if (pastries.length === 0) {
+    return res.json({ message: "No pastries available" });
+  }
+  res.json({ message: "Here are all the pastries ", pastries: pastries });
 });
 
 // post - add a new pastry
@@ -38,7 +42,7 @@ app.post("/pastries", (req, res) => {
     .json({ message: `${req.body.name} Added!`, pastry: result.data });
 });
 
-// put - update a pastry by name (case-insensitive)
+// put - update a pastry
 app.put("/pastries/:name", (req, res) => {
   const pastryName = req.params.name.trim().toLowerCase();
   const pastryIndex = pastries.findIndex(
@@ -57,6 +61,13 @@ app.put("/pastries/:name", (req, res) => {
   pastry.calories = req.body.calories ?? pastry.calories;
 
   res.json({ message: `${pastry.name} updated!`, pastry });
+});
+
+// delete - remove a pastry
+app.delete("/pastries/:name", (req, res) => {
+  const pastryName = req.params.name.trim().toLowerCase();
+  pastries = pastries.filter((p) => p.name.trim().toLowerCase() !== pastryName);
+  res.json({ message: `${req.params.name} deleted!` });
 });
 
 // start server
