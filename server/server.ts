@@ -9,7 +9,6 @@ app.use(express.json());
 
 // pastry schema
 const pastrySchema = z.object({
-  id: z.string().uuid().optional(),
   name: z.string(),
   price: z.number().min(0),
   isGlutenFree: z.boolean().optional(),
